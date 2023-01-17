@@ -29,7 +29,7 @@ def pre_processs_data(questionnaire_data: pd.DataFrame, output_dir: str) -> pd.D
     selected_column = selected_column.drop_duplicates(subset=None, inplace=False)
     print("There are ", len(duplicated_data), " duplicated columns in questionarire column.")
     print("After drop duplicate columns, Length of remaining questionarire column index is ", len(selected_column), '\n')
-    # duplicated_data.to_excel(os.path.join(output_dir, "duplicated_data.xlsx"), encoding='gb18030')
+    duplicated_data.to_excel(os.path.join(output_dir, "duplicated_data.xlsx"))
     
 
     illegal_column = selected_column.drop(index=selected_column.index)
@@ -42,7 +42,7 @@ def pre_processs_data(questionnaire_data: pd.DataFrame, output_dir: str) -> pd.D
                 selected_column = selected_column.drop(index, axis=0)
     print("There are ", len(illegal_column), " illegal columns in questionarire column.")
     print("After drop illegal columns, Length of useful questionarire column index is ", len(selected_column), '\n')
-    # illegal_column.to_excel(os.path.join(output_dir, "illegal_column.xlsx"), encoding='gb18030')
+    illegal_column.to_excel(os.path.join(output_dir, "illegal_column.xlsx"))
 
     selected_column.columns = selected_column.columns.str.replace('Q1_您的性别', 'sex')
     selected_column.columns = selected_column.columns.str.replace('Q2_您的年龄', 'age')
@@ -70,38 +70,39 @@ def pre_processs_data(questionnaire_data: pd.DataFrame, output_dir: str) -> pd.D
     selected_column.columns = selected_column.columns.str.replace('Q24_体现社区文化的艺术装置、景观雕塑等', 'culture_space')
     selected_column.columns = selected_column.columns.str.replace('Q25_画展、音乐会、节庆活动等艺文空间', 'artistic_space')
 
-    cluster_column = selected_column.iloc[:, [0,1,2,3,4,5,6,7,8]]
-    # cluster_column = selected_column.iloc[:, [1,2,4]]
-    # print(cluster_column)
+    # cluster_column = selected_column.iloc[:, [0,1,2,3,4,5,6,7,8]]
+ 
+    # cluster_column['sex'] = cluster_column.loc[:,'sex'].map(sex_map)
+    # cluster_column['age'] = cluster_column['age'].map(age_map)
+    # cluster_column['education'] = cluster_column['education'].map(education_map)
+    # cluster_column['profession'] = cluster_column['profession'].map(profession_map)
+    # cluster_column['annual_pay'] = cluster_column['annual_pay'].map(annual_pay_map)
+    # cluster_column['family_num'] = cluster_column['family_num'].map(family_num_map)
+    # cluster_column['residence_type'] = cluster_column['residence_type'].map(residence_type_map)
+    # cluster_column['community_space'] = cluster_column['community_space'].map(community_space_map)
+    # cluster_column['exercise_frequency'] = cluster_column['exercise_frequency'].map(exercise_frequency_map)
+    # print('In cluster_column, nan_num=',cluster_column.isnull().sum().sum(), ", replace them.")
+    # cluster_column = cluster_column.fillna(value={'profession':12, 'family_num':4})
+    # print("Digital Column is: \n", cluster_column, "\n")
 
-    cluster_column['sex'] = cluster_column.loc[:,'sex'].map(sex_map)
+    cluster_column = selected_column.iloc[:, [1,2,4,5,8]]
+    print(cluster_column)
+
+    # cluster_column['sex'] = cluster_column.loc[:,'sex'].map(sex_map)
     cluster_column['age'] = cluster_column['age'].map(age_map)
     cluster_column['education'] = cluster_column['education'].map(education_map)
-    cluster_column['profession'] = cluster_column['profession'].map(profession_map)
+    # cluster_column['profession'] = cluster_column['profession'].map(profession_map)
     cluster_column['annual_pay'] = cluster_column['annual_pay'].map(annual_pay_map)
     cluster_column['family_num'] = cluster_column['family_num'].map(family_num_map)
-    cluster_column['residence_type'] = cluster_column['residence_type'].map(residence_type_map)
-    cluster_column['community_space'] = cluster_column['community_space'].map(community_space_map)
+    # cluster_column['residence_type'] = cluster_column['residence_type'].map(residence_type_map)
+    # cluster_column['community_space'] = cluster_column['community_space'].map(community_space_map)
     cluster_column['exercise_frequency'] = cluster_column['exercise_frequency'].map(exercise_frequency_map)
     print('In cluster_column, nan_num=',cluster_column.isnull().sum().sum(), ", replace them.")
     cluster_column = cluster_column.fillna(value={'profession':12, 'family_num':4})
     print("Digital Column is: \n", cluster_column, "\n")
 
-    # # cluster_column['sex'] = cluster_column.loc[:,'sex'].map(sex_map)
-    # cluster_column['age'] = cluster_column['age'].map(age_map)
-    # cluster_column['education'] = cluster_column['education'].map(education_map)
-    # # cluster_column['profession'] = cluster_column['profession'].map(profession_map)
-    # cluster_column['annual_pay'] = cluster_column['annual_pay'].map(annual_pay_map)
-    # # cluster_column['family_num'] = cluster_column['family_num'].map(family_num_map)
-    # # cluster_column['residence_type'] = cluster_column['residence_type'].map(residence_type_map)
-    # # cluster_column['community_space'] = cluster_column['community_space'].map(community_space_map)
-    # # cluster_column['exercise_frequency'] = cluster_column['exercise_frequency'].map(exercise_frequency_map)
-    # print('In cluster_column, nan_num=',cluster_column.isnull().sum().sum(), ", replace them.")
-    # cluster_column = cluster_column.fillna(value={'profession':12, 'family_num':4})
-    # print("Digital Column is: \n", cluster_column, "\n")
-
     print("------------------------------------------------------------------------\n")
-    # cluster_column.to_excel(os.path.join(output_dir, "cluster_column.xlsx"), encoding='gb18030')
-    # selected_column.to_excel(os.path.join(output_dir, "selected_column.xlsx"), encoding='gb18030')
+    cluster_column.to_excel(os.path.join(output_dir, "cluster_column.xlsx"))
+    selected_column.to_excel(os.path.join(output_dir, "selected_column.xlsx"))
 
     return cluster_column, selected_column
